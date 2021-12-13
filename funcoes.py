@@ -1,6 +1,11 @@
 from tkinter import *
 import sqlite3
 import gui as g
+import base64
+base64.encodestring = base64.encodebytes
+base64.decodestring = base64.decodebytes
+from reportlab.pdfgen import canvas
+import webbrowser
 
 def limparDados():
     g.entryNome.delete(0, END)
@@ -95,3 +100,46 @@ def editarFuncionario():
     desconectaDB()
     limparDados()
     verLista(g.bancoDados)
+
+def gerarRelatorioPDF():
+    c = canvas.Canvas("funcionarios.pdf")
+
+    concectaDB()
+    lista = cursor.execute("""SELECT * FROM cadastro ORDER BY id ASC;""")
+
+    c.setFont("Helvetica-Bold", 20)
+    c.drawString(200,790,'FICHA DE FUNCIONÁRIOS')
+    
+    espaco = 0
+    linha = 0
+    
+    for i in lista:
+        c.setFont("Helvetica-Bold", 10)
+        c.drawString(50, 720 - espaco, 'ID: ' + str(i[0]))
+        c.drawString(50, 700 - espaco, 'NOME: ' + str(i[1]))
+        c.drawString(50, 680 - espaco, 'DEPARTAMENTO: ' + str(i[2]))
+        c.drawString(50, 660 - espaco, 'SALÁRIO: ' + str(i[3]))
+        c.drawString(50, 640 - espaco, 'EMAIL: ' + str(i[4]))
+        c.drawString(50, 620 - espaco, 'TELEFONE: ' + str(i[5]))
+        c.rect(20, 620 - (espaco + 20), 550, 2, fill=True, stroke=False)
+        espaco = espaco + 150
+        linha = linha + 1
+
+        if (linha >= 6):
+            espaco = 0
+            c.showPage()
+            c.setFont("Helvetica-Bold", 10)
+            c.drawString(50, 720 - espaco, 'ID: ' + str(i[0]))
+            c.drawString(50, 700 - espaco, 'NOME: ' + str(i[1]))
+            c.drawString(50, 680 - espaco, 'DEPARTAMENTO: ' + str(i[2]))
+            c.drawString(50, 660 - espaco, 'SALÁRIO: ' + str(i[3]))
+            c.drawString(50, 640 - espaco, 'EMAIL: ' + str(i[4]))
+            c.drawString(50, 620 - espaco, 'TELEFONE: ' + str(i[5]))
+            c.rect(20, 620 - (espaco + 20), 550, 2, fill=True, stroke=False)
+            espaco = espaco + 150
+            linha = 1
+
+    c.showPage()
+    c.save()
+    webbrowser.open("funcionarios.pdf")
+    desconectaDB()

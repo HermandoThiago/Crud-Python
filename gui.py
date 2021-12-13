@@ -79,7 +79,7 @@ def clickDuplo(event):
 buttonCadastrar = Button(frameCadastro, text='CADASTRAR',bg='#245af0',fg='white',font='Verdana 8 bold',command=f.addFuncionario).place(relx=0.05,rely=0.32,relwidth=0.2,relheight=0.06)
 buttonExcluir = Button(frameCadastro, text='EXCLUIR',bg='#245af0',fg='white',font='Verdana 8 bold',command=f.deletarFuncionario).place(relx=0.27,rely=0.32,relwidth=0.2,relheight=0.06)
 buttonEditar = Button(frameCadastro, text='EDITAR',bg='#245af0',fg='white',font='Verdana 8 bold',command=f.editarFuncionario).place(relx=0.49,rely=0.32,relwidth=0.2,relheight=0.06)
-buttonCSV = Button(frameCadastro, text='EXPORTAR CSV',bg='#245af0',fg='white',font='Verdana 8 bold').place(relx=0.71,rely=0.32,relwidth=0.2,relheight=0.06)
+buttonCSV = Button(frameCadastro, text='EXPORTAR PDF',bg='#245af0',fg='white',font='Verdana 8 bold',command=f.gerarRelatorioPDF).place(relx=0.71,rely=0.32,relwidth=0.2,relheight=0.06)
 
 # SCROLLBAR
 scrollbar = Scrollbar(frameData,orient=VERTICAL)
